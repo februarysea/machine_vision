@@ -2,7 +2,7 @@ import cv2
 import os
 import random
 
-out_dir = 'zzl'
+out_dir = 'wdc'
 if not os.path.exists(out_dir):
     os.makedirs(out_dir)
 
@@ -42,7 +42,7 @@ while 1:
         # minNeighobrs 目标监测到5次才算真正的目标
         faces = haar.detectMultiScale(image=gray_img, scaleFactor=1.3, minNeighbors=5)
         for f_x, f_y, f_w, f_h in faces:
-            # 裁剪剩下面部
+            # 裁剪 剩下面部
             face = img[f_y:f_y+f_h, f_x:f_x+f_w]
             face = cv2.resize(src=face, dsize=(64, 64))
             face = relight(img=face, alpha=random.uniform(0.5, 1.5), bias=random.randint(-50, 50))
@@ -52,5 +52,7 @@ while 1:
         key = cv2.waitKey(30) & 0xff
         if key == 27:
             break
+
     else:
         break
+
