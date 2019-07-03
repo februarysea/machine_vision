@@ -14,7 +14,7 @@ def LoadImages(data):
         labels：标签
     '''
     images = []
-    names = []
+    names = [""]
     labels = []
 
     label = 0
@@ -36,7 +36,7 @@ def LoadImages(data):
                 gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
                 images.append(gray_img)
                 labels.append(label)
-                print("label:" + str(label) + " img:" + str(filename))
+            print(labels)
             label += 1
     images = np.asarray(images)
     labels = np.asarray(labels)
@@ -47,13 +47,12 @@ def LoadImages(data):
 def FaceRec(data):
     # 加载训练的数据
     X, y, names = LoadImages(data)
-    # print('x',X)
-    model = cv2.face.EigenFaceRecognizer_create()
+    model = cv2.face.LBPHFaceRecognizer_create()
     model.train(X, y)
 
     # 打开摄像头
     camera = cv2.VideoCapture(0)
-    cv2.namedWindow('Dynamic')
+    cv2.namedWindow('faceRecognition')
 
     # 创建级联分类器
     face_casecade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
@@ -87,15 +86,11 @@ def FaceRec(data):
                     putText:给照片添加文字
                     putText(输入图像，'所需添加的文字'，左上角的坐标，字体，字体大小，颜色，字体粗细)
                     '''
-                    if params[1] < 2000:
-                        cv2.putText(frame, "none", (x, y - 20), cv2.FONT_HERSHEY_SIMPLEX, 1, 255, 2)
-                    else:
-                        cv2.putText(frame, names[params[0]], (x, y - 20), cv2.FONT_HERSHEY_SIMPLEX, 1, 255, 2)
-
+                    cv2.putText(frame, names[params[0]], (x, y - 20), cv2.FONT_HERSHEY_SIMPLEX, 1, 255, 2)
                 except:
                     continue
 
-            cv2.imshow('Dynamic', frame)
+            cv2.imshow('人脸识别test', frame)
 
             # 按下esc键退出
             if cv2.waitKey(100) & 0xFF == 27:

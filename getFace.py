@@ -2,11 +2,11 @@ import cv2
 import os
 import random
 
-out_dir = 'wdc'
+out_dir = 'jch'
 if not os.path.exists(out_dir):
     os.makedirs(out_dir)
 
-
+'''
 # 改变亮度与对比度
 def relight(img, alpha=1, bias=0):
     w = img.shape[1]
@@ -21,6 +21,7 @@ def relight(img, alpha=1, bias=0):
                     tmp = 0
                 img[j, i, c] = tmp
     return img
+'''
 
 
 # 获取分类器
@@ -31,7 +32,7 @@ camera = cv2.VideoCapture(0)
 
 n = 1
 while 1:
-    if n <= 200:
+    if n <= 100:
         print('It`s processing %s image.' % n)
         # 读帧
         success, img = camera.read()
@@ -45,9 +46,9 @@ while 1:
             # 裁剪 剩下面部
             face = img[f_y:f_y+f_h, f_x:f_x+f_w]
             face = cv2.resize(src=face, dsize=(64, 64))
-            face = relight(img=face, alpha=random.uniform(0.5, 1.5), bias=random.randint(-50, 50))
             cv2.imshow('img', face)
-            cv2.imwrite(out_dir+'/'+str(n)+'.jpg', face)
+            # png rather than jpg
+            cv2.imwrite(out_dir+'/'+str(n)+'.png', face)
             n += 1
         key = cv2.waitKey(30) & 0xff
         if key == 27:
